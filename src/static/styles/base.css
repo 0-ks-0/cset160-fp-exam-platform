@@ -32,7 +32,7 @@ html, body
 
 body
 {
-	background-color: var(--palette1);
+	/* background-color: var(--palette1); */
 
 	display: flex;
 }
