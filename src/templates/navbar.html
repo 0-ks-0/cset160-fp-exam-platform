@@ -1,0 +1,31 @@
+{% set navbar_data = [
+	['Accounts', 'accounts', 'person-circle-outline'],
+	['Tasks', 'home', 'document-text-outline'],
+	['Grades', 'grades', 'stats-chart-outline'],
+	['Settings', 'home', 'settings-outline']
+] %}
+
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
+
+<div id="navbar">
+	<ion-icon id="logo" name="shapes-outline"></ion-icon>
+
+	<div>
+		{% for page in navbar_data %}
+			{% set page_name = page[0] %}
+			{% set page_url = page[1] %}
+			{% set page_icon = page[2] %}
+
+			{% set class_suffix = "" %}
+
+			{% if active_page == page_name %}
+				{% set class_suffix = "active" %}
+			{% endif %}
+
+			<div class="navbar_button {{ class_suffix | string }}" onclick="set_top('{{ page_url | string }}')">
+				<ion-icon name="{{ page_icon | string }}"></ion-icon>
+				<p>{{ page_name }}</p>
+			</div>
+		{% endfor %}
+	</div>
+</div>

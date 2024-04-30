@@ -1,0 +1,32 @@
+input, select, button
+{
+	padding: 1em;
+
+	background-color: white;
+
+	border: 1px solid black;
+}
+
+select:hover, button:hover
+{
+	background-color: lightgray;
+}
+
+select, button
+{
+	cursor: pointer;
+}
+
+input:focus, select:focus, button:focus
+{
+	outline: none;
+}
+
+input[type=submit]
+{
+	background-color: var(--palette4);
+
+	border: none;
+
+	cursor: pointer;
+}

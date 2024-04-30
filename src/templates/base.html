@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			{% block title %}
+			Awesome Test Website
+			{% endblock %}
+		</title>
+
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}">
+
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'styles/base.css') }}">
+
+		{% block head %}
+		{% endblock %}
+	</head>
+
+	<body>
+		{% if not no_navbar %}
+			{% block navbar %}
+				{% include 'navbar.html' %}
+			{% endblock %}
+		{% endif %}
+
+		<div id="body_block">
+			{% block body %}
+			{% endblock %}
+		</div>
+
+		<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+		<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+	</body>
+</html>

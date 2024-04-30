@@ -1,0 +1,41 @@
+#body_block
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+form
+{
+	min-width: 50%;
+
+	display: flex;
+	flex-direction: column;
+
+	gap: 1em;
+
+	padding: 1em;
+
+	background-color: white;
+
+	text-align: center;
+
+	box-shadow: 0.1em 0 1em black;
+}
+
+#error
+{
+	color: red;
+}
+
+#form_footer
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#alternate
+{
+	font-size: 0.9em;
+}

@@ -1,0 +1,37 @@
+{% set active_page = "Tasks" %}
+
+{% extends "base.html" %}
+
+{% block title %}
+Awesome Test Website - Home
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename = '/styles/assignments.css') }}">
+
+<script src="{{ url_for('static', filename = '/js/nav.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div id="assignments_body">
+	{% if account_type == "teacher" %}
+		<div class="assignment_button" onclick="set_top('assignments/add')">
+			Create Assignment
+		</div>
+
+		<div class="assignment_button" onclick="set_top('assignments/')">
+			View Assignments
+		</div>
+
+	{% elif account_type == "student" %}
+		<div class="assignment_button" onclick="set_top('assignments')">
+			All Assignments
+		</div>
+
+		<div class="assignment_button">
+			Assignments Taken
+		</div>
+
+	{% endif %}
+</div>
+{% endblock %}

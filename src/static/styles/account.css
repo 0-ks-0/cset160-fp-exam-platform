@@ -1,0 +1,59 @@
+.flex_column
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+};
+
+#page_controls button
+{
+	background-color: white;
+
+	padding: 0.1em 0.2em;
+
+	border: none;
+
+	/* box-shadow: 0 8px 16px 0 rgba(80, 114, 123, 0.2), 0 6px 20px 0 rgba(80, 114, 123, 0.19); */
+
+}
+#page_controls button:not(:disabled):hover
+{
+	background-color: var(--palette3);
+
+	cursor: pointer;
+}
+
+select:hover
+{
+	cursor: pointer;
+}
+
+#account
+{
+	width: 100%;
+
+	gap: 0.5em;
+}
+
+#account a
+{
+	width: 50%;
+}
+
+.account_button
+{
+	padding: 1em;
+
+	width: 100%;
+
+	background-color: var(--palette3);
+
+	color: white;
+}
+
+.account_button:hover
+{
+	cursor: pointer;
+
+	background-color: var(--palette4);
+}

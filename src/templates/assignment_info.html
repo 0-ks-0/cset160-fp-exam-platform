@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+View Assignment
+{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/util.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/nav.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+<div id="assignment_view_body">
+	<h3>{{ assignment_info[0].title }}</h3>
+	<p>Created by {{ teacher[0].first_name }} {{ teacher[0].last_name }}</p>
+	<p>{{ students_count }} student(s) have taken this test</p>
+
+	<div id="info">
+		{% for i in range(assignment_data | length) %}
+			<div class="student_info">
+				Student: {{ assignment_data[i].student_id }}
+				Grade: {{ assignment_data[i] }}
+			</div>
+		{% endfor %}
+	</div>
+
+	{% if account_type == "student" %}
+		<button onclick="set_top('assignments/take/{{ assignment_id }}')">Take Assignment</button>
+	{% endif %}
+
+</div>
+{% endblock %}
