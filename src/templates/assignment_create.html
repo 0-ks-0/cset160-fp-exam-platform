@@ -15,7 +15,7 @@ Create Assignment
 <div class="page_body">
 	<form id="question_create_form" action="" class="flex_column">
 		<input type="text" name="title" placeholder="Assignment Name">
-		<input type="number" name="points" placeholder="Points" min="1" step="1" required onkeypress="return handleNegative()">
+		<input type="number" name="points" placeholder="Points" min="1" step="1" required onkeypress="return handleNegative(event)">
 
 		<input type="button" value="+" id="question_create_button" onclick="createQuestion()">
 
