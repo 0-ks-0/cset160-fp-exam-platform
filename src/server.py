@@ -259,12 +259,24 @@ def create_assignment(user_id, title, points):
 
 	return get_query_rows("select last_insert_id() as `id`;")[0].id
 
+def add_questions(assignment_id, questions):
+	"""
+	:param int/str assignment_id:
+	:param list questions:
+	"""
+
+	for question in questions:
+		run_query(f"insert into assignment_questions values (null, {assignment_id}, '{question}');")
+
+	sql.commit()
+
 # End of functions
 
 # Insert test data
 create_user_account("student", "student", "account", "s@s.s", "s")
 create_user_account("teacher", "teacher", "account", "t@t.t", "t")
-create_assignment(1, "tests asisgnweoigfjaew")
+create_assignment(1, "tests asisgnweoigfjaew", 10)
+add_questions(1, ["q1", "q2"])
 # End of inserting test values
 
 # Routes
@@ -425,6 +437,29 @@ def show_create_assignment():
 		return redirect("/assignments")
 
 	return render_template("assignment_create.html")
+
+@app.route("/assignments/create/", methods = [ "POST" ])
+def route_create_assignment():
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	data = request.get_json()
+
+	title = data.get("title")
+	points = data.get("points")
+
+	assignment_id = create_assignment(session.get("user_id"), title, points)
+
+	questions = data.get("questions")
+
+	add_questions(assignment_id, questions)
+
+	return {
+		"message": "Assignment created sucessfully",
+		"url": "/assignments"
+	}
+
 
 @app.route("/take_test/<id>")
 def take_test(id):
