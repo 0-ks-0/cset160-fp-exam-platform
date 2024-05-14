@@ -246,12 +246,19 @@ def get_account_type(user_id):
 
 # End of accounts
 
+# Assignments
+# Assignments
+def create_assignment(user_id, title):
+	run_query(f"insert into `assignments` values ( null, {user_id}, '{title}' );")
+
+	sql.commit()
+
 # End of functions
 
 # Insert test data
 create_user_account("student", "student", "account", "s@s.s", "s")
 create_user_account("teacher", "teacher", "account", "t@t.t", "t")
-
+create_assignment(1, "tests asisgnweoigfjaew")
 # End of inserting test values
 
 # Routes
@@ -387,6 +394,20 @@ def view_info(id):
 
 	except Exception as e:
 		return str(e)
+
+# Assignments
+@app.route("/assignments/")
+def show_assignments():
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	assignments = get_query_rows(f"select * from assignments;")
+
+	return render_template(
+		"assignments.html",
+		assignments = assignments
+	)
 
 # End of routes
 

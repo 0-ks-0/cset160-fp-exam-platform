@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assignments
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'styles/accounts.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <div class="test-list">
+        <h1>User Accounts</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Test Title</th>
+                    <th>Take Test</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for assignment in assignments %}
+
+                    <tr>
+                        <td>{{ assignment.id }}</td>
+                        <td>{{ assignment.title }}</td>
+                        <td><a href="/take_test/{{ assignment.id }}"><button>Take Test</button></a></td>
+                    </tr>
+
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
