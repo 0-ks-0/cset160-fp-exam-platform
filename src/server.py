@@ -424,6 +424,7 @@ def show_assignments():
 
 	return render_template(
 		"assignments.html",
+		account_type = session.get("account_type"),
 		assignments = assignments
 	)
 

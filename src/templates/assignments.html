@@ -29,7 +29,11 @@ Assignments
                     <tr>
                         <td>{{ assignment.id }}</td>
                         <td>{{ assignment.title }}</td>
-                        <td><a href="/take_test/{{ assignment.id }}"><button>Take Test</button></a></td>
+                        <td>
+							{% if account_type == "student" %}
+								<a href="/take_test/{{ assignment.id }}"><button>Take Test</button></a>
+							{% endif %}
+						</td>
                     </tr>
 
 
