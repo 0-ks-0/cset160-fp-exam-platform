@@ -20,7 +20,6 @@ create table `assignments`
 	`id` int unsigned auto_increment,
 	`user_id` int unsigned not null,
 	`title` varchar(255) not null,
-	`due_date` datetime,
 
 	primary key (`id`),
 	foreign key (`user_id`) references `users` (`id`) on delete restrict on update restrict
