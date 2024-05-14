@@ -28,3 +28,21 @@ def display_assignment_add():
 		"assignment_manage.html",
 		mode = "add"
 	)
+
+@app.route("/assignments/add/", methods = [ "POST" ])
+def add_assignment():
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	title = request.form.get("title")
+	due_date = request.form.get("due_date")
+	teacher_id = session.get("teacher_id")
+
+	insert_assignment(teacher_id, title, due_date)
+
+	return render_template(
+		"assignment_manage.html",
+		mode = "add",
+		message = "Assignment has been created"
+	)
