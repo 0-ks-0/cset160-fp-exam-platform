@@ -372,12 +372,21 @@ def show_accounts():
 		return redirect("/login")
 
 	accounts = get_query_rows(f"select `id`, `email_address` from `users` order by `id`;")
-	print(accounts)
 
 	return render_template(
 		"accounts.html",
 		accounts = accounts
 	)
+
+@app.route('/accounts/<id>')
+def view_info(id):
+	try:
+		user = get_query_rows(f"SELECT * FROM users WHERE id = {id}")[0]
+
+		return render_template('account_info.html',user=user, id=id)
+
+	except Exception as e:
+		return str(e)
 
 # End of routes
 
