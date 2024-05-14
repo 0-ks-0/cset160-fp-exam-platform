@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+Accounts
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<script src="{{ url_for('static', filename = 'js/navigator.js') }}"></script>
+
+<div class="page_body">
+	{% for account in accounts %}
+		<div class="account" onclick="setTop('/accounts/{{ account.id }}')">
+			<h4>{{ account.id }}</h4>
+			<p>{{ account.email_address }}</p>
+		</div>
+	{% endfor %}
+</div>
+{% endblock %}

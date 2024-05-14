@@ -252,7 +252,6 @@ def get_account_type(user_id):
 create_user_account("student", "student", "account", "s@s.s", "s")
 create_user_account("teacher", "teacher", "account", "t@t.t", "t")
 
-
 # End of inserting test values
 
 # Routes
@@ -364,6 +363,21 @@ def check_signup():
 			no_navbar = True,
 			message = "Sorry, your account could not be created"
 		)
+
+# Accounts
+@app.route("/accounts/")
+def show_accounts():
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	accounts = get_query_rows(f"select `id`, `email_address` from `users` order by `id`;")
+	print(accounts)
+
+	return render_template(
+		"accounts.html",
+		accounts = accounts
+	)
 
 # End of routes
 
