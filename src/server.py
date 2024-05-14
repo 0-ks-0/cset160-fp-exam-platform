@@ -32,7 +32,7 @@ def run_file(path, parameters = None):
 	return run_query(file.read(), parameters)
 
 # Set up database
-run_file("./scripts/db/setup.sql")
+# run_file("./scripts/db/setup.sql")
 
 
 # Functions
@@ -249,7 +249,7 @@ def get_account_type(user_id):
 # Assignments
 # Assignments
 def create_assignment(user_id, title):
-	run_query(f"insert into `assignments` values ( null, {user_id}, '{title}' );")
+	run_query(f"insert into `assignments` values ( null, {user_id}, '{title}', 10);")
 
 	sql.commit()
 
@@ -409,6 +409,18 @@ def show_assignments():
 		assignments = assignments
 	)
 
+@app.route("/assignments/create/")
+def show_create_assignment():
+	return render_template("assignment_create.html")
+
+@app.route("/take_test/<id>")
+def take_test(id):
+	questions = get_query_rows(f"select * from `assignment_questions` where `assignment_id` = {id};")
+
+	return render_template(
+		"assignment_take.html",
+		questions = questions
+	)
 # End of routes
 
 if __name__ == "__main__":
