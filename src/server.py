@@ -32,7 +32,7 @@ def run_file(path, parameters = None):
 	return run_query(file.read(), parameters)
 
 # Set up database
-# run_file("./scripts/db/setup.sql")
+run_file("./scripts/db/setup.sql")
 
 
 # Functions
@@ -248,10 +248,16 @@ def get_account_type(user_id):
 
 # Assignments
 # Assignments
-def create_assignment(user_id, title):
-	run_query(f"insert into `assignments` values ( null, {user_id}, '{title}', 10);")
+def create_assignment(user_id, title, points):
+	"""
+	:return:
+		assignment id
+	"""
+	run_query(f"insert into `assignments` values ( null, {user_id}, '{title}', {points});")
 
 	sql.commit()
+
+	return get_query_rows("select last_insert_id() as `id`;")[0].id
 
 # End of functions
 
@@ -411,6 +417,13 @@ def show_assignments():
 
 @app.route("/assignments/create/")
 def show_create_assignment():
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	if get_account_type(session.get("user_id")) != "teacher":
+		return redirect("/assignments")
+
 	return render_template("assignment_create.html")
 
 @app.route("/take_test/<id>")
