@@ -32,6 +32,9 @@ Assignments
                         <td>
 							{% if account_type == "student" %}
 								<a href="/take_test/{{ assignment.id }}"><button>Take Test</button></a>
+
+							{% elif account_type == "teacher" %}
+								<a href="/assignments/edit/{{ assignment.id }}"><button>Edit Test</button></a>
 							{% endif %}
 						</td>
                     </tr>
