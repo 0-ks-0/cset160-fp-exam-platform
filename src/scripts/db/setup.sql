@@ -20,6 +20,7 @@ create table `assignments`
 	`id` int unsigned auto_increment,
 	`user_id` int unsigned not null,
 	`title` varchar(255) not null,
+	`points` int unsigned not null,
 
 	primary key (`id`),
 	foreign key (`user_id`) references `users` (`id`) on delete restrict on update restrict
@@ -30,7 +31,6 @@ create table `assignment_questions`
 	`id` int unsigned auto_increment,
 	`assignment_id` int unsigned not null,
 	`question` text not null,
-	`points` int unsigned not null,
 
 	primary key (`id`),
 	foreign key (`assignment_id`) references `assignments` (`id`) on delete cascade on update restrict
