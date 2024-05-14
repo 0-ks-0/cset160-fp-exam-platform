@@ -58,5 +58,5 @@ create table `assignment_attempt_responses`
 
 	primary key (`id`),
 	foreign key (`attempt_id`) references `assignment_attempts` (`id`) on delete cascade on update restrict,
-	foreign key (`question_id`) references `assignment_questions` (`id`) on delete cascade on update restrict,
+	foreign key (`question_id`) references `assignment_questions` (`id`) on delete cascade on update restrict
 );
