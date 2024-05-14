@@ -464,16 +464,16 @@ def route_create_assignment():
 
 @app.route("/take_test/<id>")
 def take_test(id):
-	assignment_name = get_query_rows(f"select * from `assignments` where `id` = {id};")
+	assignment_data = get_query_rows(f"select * from `assignments` where `id` = {id};")
 
-	if len(assignment_name) < 1:
+	if len(assignment_data) < 1:
 		return redirect("/assignments")
 
 	questions = get_query_rows(f"select * from `assignment_questions` where `assignment_id` = {id};")
 
 	return render_template(
 		"assignment_take.html",
-		assignment_name = assignment_name[0].title,
+		assignment_data = assignment_data[0]
 		questions = questions
 	)
 # End of routes
