@@ -43,6 +43,7 @@ create table `assignment_attempts`
 	`assignment_id` int unsigned not null,
 	`submission_date` datetime not null,
 	`graded` boolean not null,
+	`grade` int unsigned,
 
 	primary key (`id`),
 	foreign key (`user_id`) references `users` (`id`) on delete restrict on update restrict,
