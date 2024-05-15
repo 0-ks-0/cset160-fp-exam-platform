@@ -270,13 +270,14 @@ def add_questions(assignment_id, questions):
 
 	sql.commit()
 
-def create_assignment_attempt(user_id, assignment_id, submission_date = None, graded = None, grade = None):
+def create_assignment_attempt(user_id, assignment_id, submission_date = None, graded = None, grade = None, graded_by = None):
 	"""
 	:param int/str user_id:
 	:param int/str assignment_id:
 	:param str/None submission_date:
 	:param int/bool/str/None graded:
 	:param int/str/None grade:
+	:param int/str/None graded_by:
 
 	:return:
 		assignment attempt id
@@ -295,6 +296,9 @@ def create_assignment_attempt(user_id, assignment_id, submission_date = None, gr
 	if not grade:
 		grade = "null"
 
+	if not graded_by:
+		graded_by = "null"
+
 	run_query(f"""
 		insert into `assignment_attempts`
 		values
@@ -304,7 +308,8 @@ def create_assignment_attempt(user_id, assignment_id, submission_date = None, gr
 				{assignment_id},
 				{submission_date},
 				{graded},
-				{grade}
+				{grade},
+				{graded_by}
 			);
 	""")
 
