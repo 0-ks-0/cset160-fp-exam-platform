@@ -534,9 +534,21 @@ def route_create_assignment():
 		"url": "/assignments"
 	}
 
-
 @app.route("/take_test/<id>")
 def take_test(id):
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	# Must be student account
+	if session.get("account_type") != "student":
+		return redirect("/login")
+
+	# Cannot take assignment more than once
+	if attempt_exists(session.get("user_id"), id):
+		return redirect("/assignments")
+
+
 	assignment_data = get_query_rows(f"select * from `assignments` where `id` = {id};")
 
 	if len(assignment_data) < 1:
