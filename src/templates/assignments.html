@@ -23,11 +23,11 @@ Assignments
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
 
                 {% for assignment in assignments %}
-
-                    <tr>
+                    <tr onclick="setTop('/assignments/{{ assignment.id }}')">
                         <td>{{ assignment.id }}</td>
                         <td>{{ assignment.title }}</td>
                         <td>
@@ -40,8 +40,6 @@ Assignments
 							{% endif %}
 						</td>
                     </tr>
-
-
                 {% endfor %}
 
             </tbody>
