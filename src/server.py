@@ -678,6 +678,10 @@ def show_accounts():
 
 @app.route('/accounts/<id>')
 def view_info(id):
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
 	try:
 		user = get_query_rows(f"SELECT * FROM users WHERE id = {id}")[0]
 
