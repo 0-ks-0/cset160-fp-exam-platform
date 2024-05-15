@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assignment {{ data.assignment_info.id }}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'styles/accounts.css') }}">
+
+{% endblock %}
+
+{% block body %}
+<script src="{{ url_for('static', filename = 'js/navigator.js') }}"></script>
+
+<div class="page_body">
+	<!-- <div id="test">{{ data }}</div> -->
+
+	<div id="assignment_info">
+		<h2>Assignment ID: {{ data.assignment_info.id }}</h2>
+		<p>Assignment Name: {{ data.assignment_info.title }}</p>
+		<p>Total Points: {{ data.assignment_info.points }}</p>
+		<p>Created by: {{ data.teacher_info.email_address }}</p>
+		<p>{{ data.num_of_students }} students have taken this assignment</p>
+	</div>
+
+	<div id="attempts_info">
+		<h3>Attempts</h3>
+		{% for d in data.students %}
+			<div class="attempt">
+				<div class="user_info">
+					<h4>{{ d.user_info.user_id }}</h4>
+					<p>{{ d.user_info.email_address }}</p>
+					<p>{{ d.user_info.first_name }} {{ d.user_info.last_name }}</p>
+				</div>
+
+				<div class="attempt_info">
+					<p>Submitted at {{ d.attempt_info.submission_date }}</p>
+
+					<!-- Show if assignment graded or not -->
+					{% if d.attempt_info.graded %}
+						<p>Grade: {{ d.attempt_info.grade }}</p>
+						<p>Graded by {{ d.attempt_info.graded_by }} </p>
+					{% else %}
+						<!-- Display "Grade" button if teacher account -->
+						{% if account_type == "teacher" %}
+							<button onclick="setTop('/assignments/grade/{{ d.attempt_info.id }}')">Grade</button>
+
+						<!-- Display to student that not graded yet -->
+						{% else %}
+							<p>Not graded yet</p>
+						{% endif %}
+
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}

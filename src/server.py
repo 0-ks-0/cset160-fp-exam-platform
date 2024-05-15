@@ -348,6 +348,66 @@ def attempt_exists(user_id, assignment_id):
 
 	return get_query_rows(f"select exists(select * from assignment_attempts where assignment_id = {assignment_id} and user_id = {user_id}) as `exists`;")[0].exists
 
+def assignment_exists(assignment_id):
+	data = get_query_rows(f"select * from `assignments` where `id` = {assignment_id};")
+
+	return len(data) > 0
+
+# Get assignment data
+def get_assignment_data(assignment_id):
+	"""
+	{
+		"assignment_info" (assignments table),
+		"teacher_info" (users table),
+		"num_of_students": (int),
+		"students": [{
+			"user_info" (users table),
+			"attempt_info" (assignment_attempts table)
+		}]
+	}
+	"""
+
+	data = {}
+	# Make sure assignment exists
+	if not assignment_exists(assignment_id):
+		return
+
+	# Get info from assignments table
+	assignment_info = get_query_rows(f"select * from `assignments` where `id` = {assignment_id};")[0]
+
+	data["assignment_info"] = assignment_info
+
+	teacher_id = assignment_info.user_id
+
+	data["teacher_info"] = get_query_rows(f"select * from `users` where `id` = {teacher_id};")[0]
+
+	data["num_of_students"] = get_query_rows(f"select count(*) as `num` from `assignment_attempts` where `assignment_id` = {assignment_id};")[0].num
+
+	# Get students and their attempt info
+	attempts = get_query_rows(f"select * from assignment_attempts where assignment_id = {assignment_id};")
+
+	students = []
+
+	# No attempt data on assignment
+	if len(attempts) < 1:
+		data["students"] = students
+
+	else:
+		user_ids = [a.user_id for a in attempts]
+
+		for user_id in user_ids:
+			user_info = get_query_rows(f"select * from `users` where `id` = {user_id};")[0]
+			attempt_info = get_query_rows(f"select * from `assignment_attempts` where `assignment_id` = {assignment_id} and user_id = {user_id};")[0]
+
+			students.append({
+				"user_info": user_info,
+				"attempt_info": attempt_info
+			})
+
+		data["students"] = students
+
+	return data
+
 # End of functions
 
 # Insert test data
@@ -366,6 +426,7 @@ add_questions(2, ["test q1", "test q2"])
 attempt_id1 = create_assignment_attempt(1, 1)
 create_attempt_response(attempt_id1, 1, "answer 1")
 create_attempt_response(attempt_id1, 2, "answer 2")
+print(get_assignment_data(1))
 
 # End of inserting test values
 
@@ -516,6 +577,23 @@ def show_assignments():
 		"assignments.html",
 		account_type = session.get("account_type"),
 		assignments = assignments
+	)
+
+@app.route("/assignments/<id>")
+def view_assignment_info(id):
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	if not assignment_exists(id):
+		return redirect("/assignments")
+
+	data = get_assignment_data(id)
+
+	return render_template(
+		"assignment_info.html",
+		account_type = session.get("account_type"),
+		data = data
 	)
 
 @app.route("/assignments/create/")
