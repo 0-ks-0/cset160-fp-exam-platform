@@ -67,7 +67,7 @@ def user_exists(user_id):
 	account = get_query_rows(f"select * from `users` where `id` = {user_id}")
 
 
-	return len(account) < 1
+	return len(account) > 0
 
 # End of check if account exists
 
