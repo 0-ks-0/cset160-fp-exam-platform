@@ -82,7 +82,7 @@ function submitAssignment(event, assignment_id)
 		const name = answer.name
 
 		data.push({
-			"question_id":  name.substring(name.indexOf("_") + 1),
+			"question_id": name.substring(name.indexOf("_") + 1),
 			"response": answer.value
 		})
 	}
