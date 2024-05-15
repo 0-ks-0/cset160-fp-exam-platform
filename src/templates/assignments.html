@@ -27,9 +27,9 @@ Assignments
             <tbody>
 
                 {% for assignment in assignments %}
-                    <tr onclick="setTop('/assignments/{{ assignment.id }}')">
-                        <td>{{ assignment.id }}</td>
-                        <td>{{ assignment.title }}</td>
+                    <tr>
+                        <td onclick="setTop('/assignments/{{ assignment.id }}')">{{ assignment.id }}</td>
+                        <td onclick="setTop('/assignments/{{ assignment.id }}')">{{ assignment.title }}</td>
                         <td>
 							{% if account_type == "student" %}
 								<button onclick="setTop('/take_test/{{ assignment.id }}')">Take Test</button>
