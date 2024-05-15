@@ -12,6 +12,7 @@ Account Info
 <div class="content">
     <div class="test-list">
         <h1>User Account</h1>
+
         <table>
             <thead>
                 <tr>
@@ -30,6 +31,47 @@ Account Info
                     <td>{{ user.email_address }}</td>
                     <td>{{ user.account_type }}</td>
                 </tr>
+            </tbody>
+        </table>
+
+        <h2>Assignments</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Assignment ID</th>
+                    <th>Assignment Name</th>
+                    <th>Total Points</th>
+                    <th>Submission Date</th>
+                    <th>Grade</th>
+                    <th>Graded By</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for data in assignments_data %}
+                    <tr>
+                        <td>{{ data.assignment_info.id }}</td>
+                        <td>{{ data.assignment_info.title }}</td>
+                        <td>{{ data.assignment_info.points }}</td>
+                        <td>{{ data.attempt_info.submission_date }}</td>
+
+                        {% if data.attempt_info.graded %}
+                            <td>{{ data.attempt_info.grade }}</td>
+
+                            {% if data.graded_by %}
+                                <td>{{ data.graded_by }}</td>
+
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+
+                        {% else %}
+                            <td>Not graded yet</td>
+                            <td>Not graded yet</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

@@ -417,17 +417,62 @@ def get_assignment_data(assignment_id):
 
 	return data
 
+# Get assignments data for user
+def get_user_assignment_data(user_id, assignment_id):
+	"""
+	{
+		"assignment_info" (assignments table),
+		"attempt_info" (assignment_attempts table),
+		"graded_by" (email of teacher or False)
+
+	}
+	"""
+
+	data = {}
+
+	if not assignment_exists(assignment_id):
+		return data
+
+	if not user_exists(user_id):
+		return data
+
+	# Get assignment info
+	assignment_info = get_query_rows(f"select * from `assignments` where `id` = {assignment_id};")[0]
+
+	data["assignment_info"] = assignment_info
+
+	# Get attempt info
+	attempt_info = get_query_rows(f"select * from `assignment_attempts` where `user_id` = {user_id} and `assignment_id` = {assignment_id};")
+
+	if len(attempt_info) > 0:
+		attempt_info = attempt_info[0]
+
+	data["attempt_info"] = attempt_info
+
+	# Get teacher info of the grader
+	graded_by = attempt_info.graded_by
+
+	teacher_info = None
+
+	if graded_by:
+		teacher_info = get_email(graded_by)
+
+	data["graded_by"] = teacher_info
+
+	return data
+
+
 # Get responses to an atttempt
-def get_attempt_responses(attempt_id):
-	"""
-	:return:
-		list of dicts of responses
+# def get_attempt_responses(attempt_id):
+# 	"""
+# 	:return:
+# 		list of dicts of responses
 
-		[] if the attempt_id does not exist
-	"""
-	responses = get_query_rows(f"select * from `assignment_attempt_responses` where `attempt_id` = {attempt_id};")
+# 		[] if the attempt_id does not exist
+# 	"""
+# 	responses = get_query_rows(f"select * from `assignment_attempt_responses` where `attempt_id` = {attempt_id};")
 
-	return responses
+# 	return responses
 
 # Get attempt data
 def get_attempt_data(attempt_id):
@@ -492,7 +537,7 @@ attempt_id1 = create_assignment_attempt(1, 1)
 create_attempt_response(attempt_id1, 1, "answer 1")
 create_attempt_response(attempt_id1, 2, "answer 2")
 # print(get_assignment_data(1))
-print(get_attempt_responses(1))
+# print(get_attempt_responses(1))
 
 # End of inserting test values
 
@@ -625,7 +670,23 @@ def view_info(id):
 	try:
 		user = get_query_rows(f"SELECT * FROM users WHERE id = {id}")[0]
 
-		return render_template('account_info.html',user=user, id=id)
+		assignments_data = []
+
+		# Find all assignment_ids for user
+		attempts = get_query_rows(f"select * from `assignment_attempts` where `user_id` = {id};")
+
+		# Get info for each assignment
+		if len(attempts) > 0:
+			for attempt in attempts:
+				assignment_id = attempt.assignment_id
+
+				assignments_data.append(get_user_assignment_data(id, assignment_id))
+
+		return render_template(
+			"account_info.html",
+			user = user,
+			assignments_data = assignments_data
+		)
 
 	except Exception as e:
 		return str(e)
