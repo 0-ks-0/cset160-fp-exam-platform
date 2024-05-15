@@ -351,10 +351,22 @@ def attempt_exists(user_id, assignment_id):
 # End of functions
 
 # Insert test data
+# Accounts
 create_user_account("student", "student", "account", "s@s.s", "s")
 create_user_account("teacher", "teacher", "account", "t@t.t", "t")
-create_assignment(1, "tests asisgnweoigfjaew", 10)
+
+# Assignments
+create_assignment(2, "assignment name test", 10)
 add_questions(1, ["q1", "q2"])
+
+create_assignment(2, "assignment 2", 10)
+add_questions(2, ["test q1", "test q2"])
+
+# Attempts
+attempt_id1 = create_assignment_attempt(1, 1)
+create_attempt_response(attempt_id1, 1, "answer 1")
+create_attempt_response(attempt_id1, 2, "answer 2")
+
 # End of inserting test values
 
 # Routes
