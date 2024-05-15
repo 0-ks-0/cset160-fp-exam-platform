@@ -461,6 +461,17 @@ def get_user_assignment_data(user_id, assignment_id):
 
 	return data
 
+# Get questions of assignment
+def get_assignment_questions(assignment_id):
+	questions = get_query_rows(f"select * from `assignment_questions` where `assignment_id` = 1;")
+
+	return questions
+
+# Update question
+def update_question(question_id, question):
+	run_query(f"update `assignment_questions` set `question` = '{question}' where `id` = {question_id};")
+
+	sql.commit()
 
 # Get responses to an atttempt
 # def get_attempt_responses(attempt_id):
@@ -779,6 +790,38 @@ def route_create_assignment():
 
 	return {
 		"message": "Assignment created sucessfully",
+		"url": "/assignments"
+	}
+
+@app.route("/assignments/edit/<id>")
+def show_assignment_edit_page(id):
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	# Must be teacher account
+	if session.get("account_type") != "teacher":
+		return redirect("/login")
+
+	# Make sure assignment exists
+	if not assignment_exists(id):
+		return redirect("/assignments")
+
+	return render_template(
+		"assignment_edit.html",
+		assignment_id = id,
+		questions = get_assignment_questions(id)
+	)
+
+@app.route("/assignments/edit/<id>", methods = [ "PATCH" ])
+def route_update_assignment(id):
+	question_data = request.get_json()
+
+	for data in question_data:
+		update_question(data.get("question_id"), data.get("question"))
+
+	return {
+		"message": "Updated successfully",
 		"url": "/assignments"
 	}
 

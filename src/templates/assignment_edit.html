@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Assignment {{ assignment_id }}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<script src="{{ url_for('static', filename = 'js/assignments.js') }}"></script>
+
+<div class="page_body">
+	<form id="update_form" action="" class="flex_column">
+		{% for data in questions %}
+			<textarea name="question" id="{{ data.id }}" placeholder="Question" required>{{ data.question }}</textarea>
+		{% endfor %}
+
+		<input type="submit" value="Update">
+	</form>
+</div>
+
+<script>
+	const form = document.querySelector("#update_form")
+
+	form.addEventListener("submit", (event) =>
+	{
+		editAssignment(event, {{ assignment_id }})
+	})
+</script>
+{% endblock %}

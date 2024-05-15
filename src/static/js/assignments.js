@@ -68,6 +68,54 @@ function createAssignment(event)
 	})
 }
 
+function editAssignment(event, assignment_id)
+{
+	event.preventDefault()
+
+	const questions = document.getElementsByName("question")
+
+	const data = []
+
+	for (const question of questions)
+	{
+		data.push({
+			"question_id": question.id,
+			"question": question.value
+		})
+	}
+
+	fetch(`/assignments/edit/${assignment_id}`, {
+		headers:
+		{
+			"Content-Type" : "application/json"
+		},
+		method: "PATCH",
+		body: JSON.stringify(data)
+	})
+	.then(function (response)
+	{
+		if (response.ok)
+		{
+			return response.json()
+
+			.then(response =>
+			{
+				alert(response.message)
+
+				top.location = response.url
+			})
+		}
+		else
+		{
+			throw Error(`Error: ${response.status || response.statusText}`)
+		}
+	})
+	.catch(error =>
+	{
+		console.log(error)
+	})
+}
+
 function deleteAssignment(url, assignment_id)
 {
 	fetch(`${url}`, {
