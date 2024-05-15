@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assignment
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<script src="{{ url_for('static', filename = 'js/assignments.js') }}"></script>
+
+<div class="page_body">
+	<div id="test">{{ attempt_data }}</div>
+
+	<form action="" id="grading_form">
+		{% for data in attempt_data %}
+			<div id="question_response_container">
+				<p>Question: {{ data.question_data.question }}</p>
+				<input type="text" name="response" value="{{ data.response_data.response }}" readonly><br>
+				<input type="checkbox">
+			</div><br>
+		{% endfor %}
+
+		<button onclick="gradeAttempt(event, {{ attempt_id }})">Grade</button>
+	</form>
+</div>
+{% endblock %}

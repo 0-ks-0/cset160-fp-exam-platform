@@ -122,3 +122,53 @@ function submitAssignment(event, assignment_id)
 		console.log(error)
 	})
 }
+
+function gradeAttempt(event, attempt_id)
+{
+	event.preventDefault()
+
+	earned_points = 0
+
+	const checkboxes = document.querySelectorAll("input[type = 'checkbox']")
+
+	for (const checkbox of checkboxes)
+	{
+		if (checkbox.checked)
+			earned_points++
+	}
+
+	fetch(`/assignments/grade/${attempt_id}`, {
+		headers:
+		{
+			"Content-Type" : "application/json"
+		},
+		method: "PATCH",
+		body: JSON.stringify({
+			"earned_points": earned_points
+		})
+	})
+	.then(function (response) // Callback function when response sent from server
+	{
+		// Check if status code between 200 and 300
+		if (response.ok)
+		{
+			return response.json() // Convert response from server to json
+
+			.then(response =>
+			{
+				alert(response.message)
+
+				top.location = response.url
+			})
+		}
+		else
+		{
+			throw Error(`Error: ${response.status || response.statusText}`)
+		}
+	})
+	.catch(error => // Catch errors from sending / receiving
+	{
+		console.log(error)
+	})
+
+}

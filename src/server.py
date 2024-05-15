@@ -420,6 +420,50 @@ def get_attempt_responses(attempt_id):
 
 	return responses
 
+# Get attempt data
+def get_attempt_data(attempt_id):
+	"""
+	:return:
+		list of dicts containing information on each question and response
+		[{
+			"question_data": {} (assignment_questions table),
+			"response_data": {} (assignment_attempt_responses table)
+		}]
+	"""
+
+	attempt = get_query_rows(f"select * from `assignment_attempts` where `id` = {attempt_id};")
+
+	# Check if attempt_id exists
+	if len(attempt) < 1:
+		return {}
+
+	# Find questions and responses to assignment
+	assignment_id = attempt[0].assignment_id
+
+	responses = get_query_rows(f"select * from `assignment_attempt_responses` where `attempt_id` = {attempt_id};")
+
+	# question_ids in the attempt/assignment
+	question_ids = [r.question_id for r in responses]
+
+	data = []
+
+	for question_id in question_ids:
+		question_data = get_query_rows(f"select * from `assignment_questions` where `assignment_id` = {assignment_id} and `id` = {question_id};")[0]
+		response_data = get_query_rows(f"select * from `assignment_attempt_responses` where `attempt_id` = {attempt_id} and question_id = {question_id};")[0]
+
+		data.append({
+			"question_data": question_data,
+			"response_data": response_data
+		})
+
+	return data
+
+# Update attempt grade
+def grade_attempt(attempt_id, grade, graded_by):
+	run_query(f"update `assignment_attempts` set `graded` = true, `grade` = {grade}, `graded_by` = {graded_by} where `id` = {attempt_id};")
+
+	sql.commit()
+
 # End of functions
 
 # Insert test data
@@ -685,6 +729,41 @@ def submit_test(id):
 	return {
 		"message": "Assignment submitted",
 		"url": "/assignments"
+	}
+
+@app.route("/assignments/grade/<id>")
+def show_grading_page(id):
+	if not validate_session(session):
+		destroy_session(session)
+		return redirect("/login")
+
+	# Must be teacher account
+	if session.get("account_type") != "teacher":
+		return redirect("/login")
+
+	return render_template(
+		"assignment_grade.html",
+		attempt_id = id,
+		attempt_data = get_attempt_data(id)
+	)
+
+@app.route("/assignments/grade/<id>", methods = [ "PATCH" ])
+def route_grade_attempt(id):
+	data = request.get_json()
+
+	earned_points = data.get("earned_points")
+
+	# TODO maybe validate account type as teacher
+
+	attempt = get_query_rows(f"select * from `assignment_attempts` where `id` = {id};")
+
+	assignment_id = attempt[0].assignment_id
+
+	grade_attempt(id, earned_points, session.get("user_id"))
+
+	return {
+		"message": "Assignment has been graded",
+		"url": f"/assignments/{assignment_id}"
 	}
 
 # End of routes
