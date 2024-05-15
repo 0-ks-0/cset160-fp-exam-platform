@@ -270,6 +270,14 @@ def add_questions(assignment_id, questions):
 
 	sql.commit()
 
+def delete_assignment(assignment_id):
+	# TODO create a deleted assignments table
+
+	run_query(f"delete from `assignments` where `id` = {assignment_id};")
+
+	sql.commit()
+
+# Attempts
 def create_assignment_attempt(user_id, assignment_id, submission_date = None, graded = None, grade = None, graded_by = None):
 	"""
 	:param int/str user_id:
@@ -636,6 +644,17 @@ def show_assignments():
 		account_type = session.get("account_type"),
 		assignments = assignments
 	)
+
+@app.route("/assignments/", methods = [ "DELETE" ])
+def route_delete_assignment():
+	assignment_id = request.get_json().get("assignment_id")
+
+	delete_assignment(assignment_id)
+
+	return {
+		"message": f"Assignment {assignment_id} has been deleted",
+		"url": "/assignments"
+	}
 
 @app.route("/assignments/<id>")
 def view_assignment_info(id):

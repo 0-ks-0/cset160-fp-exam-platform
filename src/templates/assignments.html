@@ -11,6 +11,7 @@ Assignments
 
 {% block body %}
 <script src="{{ url_for('static', filename = 'js/navigator.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/assignments.js') }}"></script>
 
 <div class="content">
     <div class="test-list">
@@ -36,7 +37,7 @@ Assignments
 
 							{% elif account_type == "teacher" %}
 								<button onclick="setTop('/assignments/edit/{{ assignment.id }}')">Edit</button>
-								<button onclick="deleteAssignment({{ assignment.id }})">Delete</button>
+								<button onclick="deleteAssignment('/assignments', {{ assignment.id }})">Delete</button>
 							{% endif %}
 						</td>
                     </tr>

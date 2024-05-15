@@ -66,7 +66,43 @@ function createAssignment(event)
 	{
 		console.log(error)
 	})
+}
 
+function deleteAssignment(url, assignment_id)
+{
+	fetch(`${url}`, {
+		headers:
+		{
+			"Content-Type" : "application/json"
+		},
+		method: "DELETE",
+		body: JSON.stringify({
+			"assignment_id": assignment_id,
+		})
+	})
+	.then(function (response) // Callback function when response sent from server
+	{
+		// Check if status code between 200 and 300
+		if (response.ok)
+		{
+			return response.json() // Convert response from server to json
+
+			.then(response =>
+			{
+				alert(response.message)
+
+				top.location = response.url
+			})
+		}
+		else
+		{
+			throw Error(`Error: ${response.status || response.statusText}`)
+		}
+	})
+	.catch(error => // Catch errors from sending / receiving
+	{
+		console.log(error)
+	})
 }
 
 function submitAssignment(event, assignment_id)
