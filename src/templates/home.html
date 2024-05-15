@@ -11,7 +11,6 @@ Home
 {% block body %}
 <script src="{{ url_for('static', filename = 'js/navigator.js') }}"></script>
 <div class="page_body">
-test
 	{% if account_type == "teacher" %}
 		<button onclick="setTop('/assignments/create')">Create Assignment</button>
 	{% endif %}
