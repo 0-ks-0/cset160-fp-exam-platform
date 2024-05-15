@@ -270,6 +270,69 @@ def add_questions(assignment_id, questions):
 
 	sql.commit()
 
+def create_assignment_attempt(user_id, assignment_id, submission_date = None, graded = None, grade = None):
+	"""
+	:param int/str user_id:
+	:param int/str assignment_id:
+	:param str/None submission_date:
+	:param int/bool/str/None graded:
+	:param int/str/None grade:
+
+	:return:
+		assignment attempt id
+	"""
+
+	if not submission_date:
+		submission_date = "now()"
+	else:
+		submission_date = f"'{submission_date}'"
+
+	if not graded:
+		graded = "false"
+	else:
+		graded = "true"
+
+	if not grade:
+		grade = "null"
+
+	run_query(f"""
+		insert into `assignment_attempts`
+		values
+			(
+				null,
+				{user_id},
+				{assignment_id},
+				{submission_date},
+				{graded},
+				{grade}
+			);
+	""")
+
+	sql.commit()
+
+	return get_query_rows("select last_insert_id() as `id`;")[0].id
+
+def create_attempt_response(attempt_id, question_id, response):
+	"""
+	:param int/str attempt_id:
+	:param int/str question_id:
+	:param str response:
+	"""
+
+	run_query(f"""
+		insert into `assignment_attempt_responses`
+		values
+			(
+				null,
+				{attempt_id},
+				{question_id},
+				'{response}'
+			);
+	""")
+
+	sql.commit()
+
+
 # End of functions
 
 # Insert test data
@@ -473,9 +536,27 @@ def take_test(id):
 
 	return render_template(
 		"assignment_take.html",
-		assignment_data = assignment_data[0]
+		assignment_data = assignment_data[0],
 		questions = questions
 	)
+
+@app.route("/take_test/<id>", methods = [ "POST" ])
+def submit_test(id):
+	json = request.get_json()
+
+	assignment_id = json.get("assignment_id")
+	data = json.get("data")
+
+	attempt_id = create_assignment_attempt(session.get("user_id"), assignment_id)
+
+	for d in data:
+		create_attempt_response(attempt_id, d.get("question_id"), d.get("response"))
+
+	return {
+		"message": "Assignment submitted",
+		"url": "/assignments"
+	}
+
 # End of routes
 
 if __name__ == "__main__":

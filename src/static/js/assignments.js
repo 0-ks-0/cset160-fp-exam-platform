@@ -68,3 +68,57 @@ function createAssignment(event)
 	})
 
 }
+
+function submitAssignment(event, assignment_id)
+{
+	event.preventDefault()
+
+	const answers = document.getElementsByClassName("answer")
+
+	const data = []
+
+	for (const answer of answers)
+	{
+		const name = answer.name
+
+		data.push({
+			"question_id":  name.substring(name.indexOf("_") + 1),
+			"response": answer.value
+		})
+	}
+
+	fetch(`/take_test/${assignment_id}`, {
+		headers:
+		{
+			"Content-Type" : "application/json"
+		},
+		method: "POST",
+		body: JSON.stringify({
+			"assignment_id": assignment_id,
+			"data": data
+		})
+	})
+	.then(function (response) // Callback function when response sent from server
+	{
+		// Check if status code between 200 and 300
+		if (response.ok)
+		{
+			return response.json() // Convert response from server to json
+
+			.then(response =>
+			{
+				alert(response.message)
+
+				top.location = response.url
+			})
+		}
+		else
+		{
+			throw Error(`Error: ${response.status || response.statusText}`)
+		}
+	})
+	.catch(error => // Catch errors from sending / receiving
+	{
+		console.log(error)
+	})
+}
