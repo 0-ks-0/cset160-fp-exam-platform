@@ -402,6 +402,7 @@ def get_assignment_data(assignment_id):
 			students.append({
 				"user_info": user_info,
 				"attempt_info": attempt_info
+				# TODO add email of the teacher for graded_by
 			})
 
 		data["students"] = students
