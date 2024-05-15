@@ -332,6 +332,16 @@ def create_attempt_response(attempt_id, question_id, response):
 
 	sql.commit()
 
+# Check if user already attempted assignment
+def attempt_exists(user_id, assignment_id):
+	"""
+	:return:
+		1 if attempt exists
+
+		0 otherwise
+	"""
+
+	return get_query_rows(f"select exists(select * from assignment_attempts where assignment_id = {assignment_id} and user_id = {user_id}) as `exists`;")[0].exists
 
 # End of functions
 
