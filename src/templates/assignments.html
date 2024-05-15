@@ -10,6 +10,7 @@ Assignments
 {% endblock %}
 
 {% block body %}
+<script src="{{ url_for('static', filename = 'js/navigator.js') }}"></script>
 
 <div class="content">
     <div class="test-list">
@@ -31,10 +32,11 @@ Assignments
                         <td>{{ assignment.title }}</td>
                         <td>
 							{% if account_type == "student" %}
-								<a href="/take_test/{{ assignment.id }}"><button>Take Test</button></a>
+								<button onclick="setTop('/take_test/{{ assignment.id }}')">Take Test</button>
 
 							{% elif account_type == "teacher" %}
-								<a href="/assignments/edit/{{ assignment.id }}"><button>Edit Test</button></a>
+								<button onclick="setTop('/assignments/edit/{{ assignment.id }}')">Edit</button>
+								<button onclick="deleteAssignment({{ assignment.id }})">Delete</button>
 							{% endif %}
 						</td>
                     </tr>
