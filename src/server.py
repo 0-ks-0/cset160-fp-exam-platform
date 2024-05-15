@@ -514,6 +514,12 @@ def get_attempt_data(attempt_id):
 
 # Update attempt grade
 def grade_attempt(attempt_id, grade, graded_by):
+	"""
+	:param int/str attempt_id:
+	:param int/str grade:
+	:param int/str graded_by: the user_id
+	"""
+
 	run_query(f"update `assignment_attempts` set `graded` = true, `grade` = {grade}, `graded_by` = {graded_by} where `id` = {attempt_id};")
 
 	sql.commit()
@@ -536,8 +542,13 @@ add_questions(2, ["test q1", "test q2"])
 attempt_id1 = create_assignment_attempt(1, 1)
 create_attempt_response(attempt_id1, 1, "answer 1")
 create_attempt_response(attempt_id1, 2, "answer 2")
-# print(get_assignment_data(1))
-# print(get_attempt_responses(1))
+
+attempt_id2 = create_assignment_attempt(1, 2)
+create_attempt_response(attempt_id2, 1, "attempt 2 answer 1")
+create_attempt_response(attempt_id2, 2, "attempt 2 answer 2")
+
+# Grading
+grade_attempt(attempt_id2, 2, 2)
 
 # End of inserting test values
 
