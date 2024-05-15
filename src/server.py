@@ -408,6 +408,18 @@ def get_assignment_data(assignment_id):
 
 	return data
 
+# Get responses to an atttempt
+def get_attempt_responses(attempt_id):
+	"""
+	:return:
+		list of dicts of responses
+
+		[] if the attempt_id does not exist
+	"""
+	responses = get_query_rows(f"select * from `assignment_attempt_responses` where `attempt_id` = {attempt_id};")
+
+	return responses
+
 # End of functions
 
 # Insert test data
@@ -426,7 +438,8 @@ add_questions(2, ["test q1", "test q2"])
 attempt_id1 = create_assignment_attempt(1, 1)
 create_attempt_response(attempt_id1, 1, "answer 1")
 create_attempt_response(attempt_id1, 2, "answer 2")
-print(get_assignment_data(1))
+# print(get_assignment_data(1))
+print(get_attempt_responses(1))
 
 # End of inserting test values
 
