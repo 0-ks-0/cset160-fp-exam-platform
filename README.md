@@ -8,7 +8,7 @@
 - Paste the installation directory
 
 #### Set up to run code
-- In MySQL, `create database cset180final;`
+- In MySQL, `create database cset160final;`
 - In `server.py` under `# Connect to database`, change `DB_USERNAME` to your username
 - In `server.py` under `# Connect to database`, change `DB_PASSWORD` to your password
 
