@@ -540,6 +540,7 @@ def grade_attempt(attempt_id, grade, graded_by):
 # Insert test data
 # Accounts
 create_user_account("student", "student", "account", "s@s.s", "s")
+create_user_account("student", "student2", "account2", "s2@s.s", "s")
 create_user_account("teacher", "teacher", "account", "t@t.t", "t")
 
 # Assignments
