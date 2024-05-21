@@ -13,7 +13,8 @@
 - In `server.py` under `# Connect to database`, change `DB_PASSWORD` to your password
 
 ### Default accounts for login in website
-- Student account
+- Student accounts
 	- Email: `s@s.s`, Password: `s`
+	- Email: `s2@s.s`, Password: `s`
 - Teacher account
 	- Email: `t@t.t`, Password: `t`
